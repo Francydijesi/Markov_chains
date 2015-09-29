@@ -2,16 +2,18 @@ from random import choice
 import sys
 
 
-def open_and_read_file(file_path):
+def open_and_read_file(file_path_list):
     """Takes file path as string; returns text as string.
 
     Takes a string that is a file path, opens the file, and turns
     the file's contents as one string of text.
     """
-
-    # your code goes here
-    content = open(file_path).read()
-    content = content.replace('\n', ' ')
+    content = ""
+    
+    for file_path in file_path_list:
+        content = content + " " + open(file_path).read()
+          
+    content.replace('\n', ' ')  
     return content
 
 
@@ -65,11 +67,16 @@ def make_text(chains):
         text += next_word + " "
 
         new_key = (new_key[1], next_word)
-    
-    return text
+
+    if text[-1].isalpha():
+        text.append(".")
+
+    return text[0].upper() + text[1:]
 
 
-input_path = sys.argv[1]
+input_path = []            
+for arg in sys.argv[1:]:
+    input_path.append(arg)
 # input_path = "gettysburg.txt"
 
 # Open the file and turn it into one long string
