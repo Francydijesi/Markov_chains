@@ -74,9 +74,12 @@ def make_text(chains):
     return text[0].upper() + text[1:]
 
 
-input_path = []            
-for arg in sys.argv[1:]:
-    input_path.append(arg)
+input_path = []
+if len(sys.argv) > 1:            
+   for arg in sys.argv[1:]:
+       input_path.append(arg)
+else:
+    input_path.append("gettysburg.txt")
 # input_path = "gettysburg.txt"
 
 # Open the file and turn it into one long string
