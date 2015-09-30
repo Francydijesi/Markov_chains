@@ -29,7 +29,7 @@ def make_chains(text_string, n):
         >>> make_chains("hi there mary hi there juanita")
         {('hi', 'there'): ['mary', 'juanita'], ('there', 'mary'): ['hi'], ('mary', 'hi': ['there']}
     """
-    
+    print n
     chains = {}
     words = text_string.split()
 
@@ -48,7 +48,7 @@ def make_chains(text_string, n):
             chains[key].append(value)
         else:
             chains[key] = [value]
-
+    print chains
     return chains
 
 
@@ -57,38 +57,54 @@ def make_text(chains):
     
     text = ""
     first_key = choice(chains.keys())
-    third_word = choice(chains[first_key])
+    next_word = choice(chains[first_key])
     
-    text += first_key[0] + " " + first_key[1] + " " + third_word + " "
-    new_key = (first_key[1], third_word)
+    words_in_tuple = []
 
+    # for word in first_key:
+    #     words_in_tuple.append(word)
+
+    text += " ".join(first_key) + " " + next_word + " "
+    
+    # Creates a new key
+    new_key = first_key[1:] + (next_word,)
+    
     while new_key in chains:
         next_word = choice(chains[new_key])
         text += next_word + " "
 
-        new_key = (new_key[1], next_word)
+        new_key = new_key[1:] + (next_word,)
 
     if text[-1].isalpha():
-        text.append(".")
+        text + "."
 
     return text[0].upper() + text[1:]
 
 
-input_path = []
-if len(sys.argv) > 1:            
-   for arg in sys.argv[1:]:
-       input_path.append(arg)
+input_paths = []
+ngrams = 2
+
+if len(sys.argv) > 2:
+   ngrams = int(sys.argv[1])  
+   for arg in sys.argv[2:]:
+       input_paths.append(arg)
 else:
     input_path.append("gettysburg.txt")
+    
 # input_path = "gettysburg.txt"
 
 # Open the file and turn it into one long string
-input_text = open_and_read_file(input_path)
+input_text = open_and_read_file(input_paths)
 
 # Get a Markov chain
-chains = make_chains(input_text,2)
+chains = make_chains(input_text,ngrams)
 
 # Produce random text
 random_text = make_text(chains)
 
 print random_text
+
+
+
+# make_text => aribtrary n-grams
+# python markov.py 3 file1.txt file2.txt
